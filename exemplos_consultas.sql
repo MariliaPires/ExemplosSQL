@@ -21,3 +21,31 @@ select titulo, nome from ator inner join estrelado_por
     inner join filme on filme.idFilme = estrelado_por.idFilme
     where estrelado_por.idFilme = 9;
 
+/* quero quanto em R$ de locacoes foram na data 2020-04-01 */
+select sum(valorAluguel) from aluga where dataAluguel = '2020-04-01';
+
+/* quais sao os valores de aluguel por data (agrupados) */ 
+select dataAluguel, sum(valorAluguel) as 'total' 
+     from aluga group by dataAluguel
+     order by dataAluguel desc;
+     
+/* qual o ticket medio de aluguel de filmes? */
+select avg(valorAluguel) from aluga;
+
+/* quanto o cliente 1 ja alugou - quanto ele deve */
+select sum(valorAluguel), nome from aluga inner join cliente
+   using(idCliente) /* equivale a: on aluga.idCliente = cliente.idCliente */
+   where idCliente = 1;
+   
+   
+/* quanto cada cliente deve */   
+select sum(valorAluguel), nome from aluga inner join cliente
+   using(idCliente) /* equivale a: on aluga.idCliente = cliente.idCliente */
+   group by idCliente;
+   
+   
+/* quanto cada cliente deve, ordenado pelos principais devedores */
+select sum(valorAluguel) as 'divida', nome from aluga inner join cliente
+   using(idCliente) /* equivale a: on aluga.idCliente = cliente.idCliente */
+   group by idCliente
+   order by divida DESC;
